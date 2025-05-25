@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>অটো লগইন সিস্টেম</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .glass {
+      backdrop-filter: blur(12px);
+      background-color: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="min-h-screen w-full flex items-center justify-center text-white px-4 py-6">
+
+  <div class="glass rounded-2xl shadow-2xl w-full max-w-lg p-6 sm:p-8 text-center flex flex-col justify-center">
+
+    <h1 class="text-3xl font-bold mb-6">📘 অটো লগইন সিস্টেম</h1>
+
+    <!-- Password Section -->
+    <div id="passwordSection">
+      <p class="mb-4 text-lg">লগইন অ্যাক্সেস পেতে পাসওয়ার্ড লিখুন:</p>
+      <input type="password" id="passwordInput" placeholder="পাসওয়ার্ড দিন..." class="rounded-lg px-4 py-3 w-full text-center text-black mb-4 text-base">
+      <button onclick="checkPassword()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg w-full text-lg">
+        🔐 প্রবেশ করুন
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" style="display: none;">
+      <p class="mb-5 text-lg">প্রথমে লগইন করতে নিচের বাটনে ক্লিক করুন:</p>
+
+      <button onclick="loginNow()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg mb-6 w-full text-lg">
+        ✅ লগইন করুন
+      </button>
+
+      <!-- Hidden Form for Auto Login -->
+      <form id="loginForm" method="POST" action="https://login.ipemis.dpe.gov.bd/login" target="_blank" style="display: none;">
+        <input type="hidden" name="username" value="01712041635">
+        <input type="hidden" name="password" value="Runu@123">
+        <input type="hidden" name="login-submit" value="Sign In">
+      </form>
+
+      <hr class="my-6 border-gray-400">
+
+      <p class="mb-2 text-lg">শিক্ষক আইডি লিখে "তথ্য দেখুন" ক্লিক করুন:</p>
+      <input type="text" id="teacherIdInput" value="116636" placeholder="যেমন: 116636" class="rounded-lg px-4 py-3 w-full text-black mb-4 text-center text-base">
+
+      <button onclick="viewTeacherInfo()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg w-full text-lg">
+        👁️‍🗨️ তথ্য দেখুন (নতুন ট্যাবে)
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <p class="mt-10 text-sm text-white/80">Developed by <span class="font-semibold text-white">B3da Hax0r With ❤️</span></p>
+
+  </div>
+
+  <script>
+    function checkPassword() {
+      const password = document.getElementById("passwordInput").value;
+      if (password === "b3da") {
+        document.getElementById("passwordSection").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+      } else {
+        alert("❌ ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।");
+      }
+    }
+
+    function loginNow() {
+      document.getElementById("loginForm").submit();
+      alert("✅ নতুন ট্যাবে লগইন হয়েছে। এখন তথ্য দেখতে আবার ফিরে আসুন।");
+    }
+
+    function viewTeacherInfo() {
+      const id = document.getElementById("teacherIdInput").value.trim();
+      if (id === "") {
+        alert("⚠️ দয়া করে একটি বৈধ শিক্ষক আইডি লিখুন।");
+        return;
+      }
+      const url = `https://ops.ipemis.dpe.gov.bd/view-teacher-info/${id}`;
+      window.open(url, '_blank');
+    }
+  </script>
+</body>
+</html>
