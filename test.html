@@ -59,14 +59,18 @@
     </div>
 
     <!-- Footer -->
-    <p class="mt-10 text-sm text-white/80">Developed by <span class="font-semibold text-white">B3da Hax0r With ❤️</span></p>
+    <p class="mt-10 text-sm text-white/80">Made With❤️<span class="font-semibold text-white">By B3da Hax0r</span></p>
 
   </div>
 
   <script>
+    // Base64 Encoded Password: b3da => YjNkYQ==
+    const encodedLoginPassword = "YjNkYQ==";
+
     function checkPassword() {
-      const password = document.getElementById("passwordInput").value;
-      if (password === "b3da") {
+      const userInput = document.getElementById("passwordInput").value;
+      const decodedPassword = atob(encodedLoginPassword);
+      if (userInput === decodedPassword) {
         document.getElementById("passwordSection").style.display = "none";
         document.getElementById("mainContent").style.display = "block";
       } else {
@@ -76,8 +80,8 @@
 
     function loginNow() {
       // Base64 Encoded Values
-      const encodedUsername = "MDE3MTIwNDE2MzU=";
-      const encodedPassword = "UnVudUAxMjM=";
+      const encodedUsername = "MDE3MTIwNDE2MzU=";  // "01712041635"
+      const encodedPassword = "UnVudUAxMjM=";      // "Runu@123"
 
       // Decode Base64
       const username = atob(encodedUsername);
