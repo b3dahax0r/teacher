@@ -7,18 +7,26 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      background: linear-gradient(to right, #4f46e5, #9333ea);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .glass {
-      backdrop-filter: blur(12px);
-      background-color: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
     }
   </style>
 </head>
-<body class="min-h-screen w-full flex items-center justify-center text-white px-4 py-6">
+<body class="min-h-screen flex items-center justify-center text-white px-4 py-6">
 
   <div class="glass rounded-2xl shadow-2xl w-full max-w-lg p-6 sm:p-8 text-center flex flex-col justify-center">
 
@@ -51,20 +59,28 @@
       <hr class="my-6 border-gray-400">
 
       <p class="mb-2 text-lg">শিক্ষক আইডি লিখে "তথ্য দেখুন" ক্লিক করুন:</p>
-      <input type="text" id="teacherIdInput" value="1" placeholder="যেমন: 116636" class="rounded-lg px-4 py-3 w-full text-black mb-4 text-center text-base">
+      <input type="text" id="teacherIdInput" placeholder="যেমন: 116636" class="rounded-lg px-4 py-3 w-full text-black mb-4 text-center text-base">
 
       <button onclick="viewTeacherInfo()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg w-full text-lg">
         👁️‍🗨️ তথ্য দেখুন (নতুন ট্যাবে)
       </button>
+
+      <!-- Search History -->
+      <div class="mt-10 text-left">
+        <h2 class="text-xl font-semibold mb-2">🔍 আপনার সার্চ হিস্টোরি:</h2>
+        <ul id="searchLog" class="text-sm bg-white/10 p-4 rounded-xl max-h-60 overflow-y-auto space-y-1"></ul>
+      </div>
     </div>
 
     <!-- Footer -->
-    <p class="mt-10 text-sm text-white/80">Made With ❤️ <span class="font-semibold text-white">By B3da Hax0r</span></p>
+    <p class="mt-10 text-sm text-white/80">
+      Made with ❤️ <a href="https://t.me/iambedahere" target="_blank" class="font-semibold text-white hover:underline">B3da Hax0r</a>
+    </p>
 
   </div>
 
   <script>
-    // Base64 Encoded Password: b3da => YjNkYQ==
+    // Base64 Encoded Login Password
     const encodedLoginPassword = "bmFzaW0=";
 
     function checkPassword() {
@@ -73,17 +89,21 @@
       if (userInput === decodedPassword) {
         document.getElementById("passwordSection").style.display = "none";
         document.getElementById("mainContent").style.display = "block";
+        setTimeout(() => {
+          alert("⚠️ ২ ঘণ্টা পেরিয়ে গেছে, আবার লগইন করতে হবে।");
+          location.reload();
+        }, 2 * 60 * 60 * 1000); // 2 hours in milliseconds
+        loadLastTeacherId();
+        displaySearchLogs();
       } else {
         alert("❌ ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।");
       }
     }
 
     function loginNow() {
-      // Base64 Encoded Values
       const encodedUsername = "MDE3MTIwNDE2MzU="; 
       const encodedPassword = "UnVudUAxMjM="; 
 
-      // Decode Base64
       const username = atob(encodedUsername);
       const password = atob(encodedPassword);
 
@@ -95,14 +115,56 @@
       alert("✅ নতুন ট্যাবে লগইন হয়েছে। এখন তথ্য দেখতে আবার ফিরে আসুন।");
     }
 
-    function viewTeacherInfo() {
+    async function getIpAddress() {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+      } catch (error) {
+        return "unknown";
+      }
+    }
+
+    async function viewTeacherInfo() {
       const id = document.getElementById("teacherIdInput").value.trim();
       if (id === "") {
         alert("⚠️ দয়া করে একটি বৈধ শিক্ষক আইডি লিখুন।");
         return;
       }
+
+      localStorage.setItem("lastTeacherId", id);
+
+      const ip = await getIpAddress();
+      let logs = JSON.parse(localStorage.getItem("searchLogs") || "[]");
+      const now = new Date().toLocaleString();
+      logs.push({ ip, id, time: now });
+      localStorage.setItem("searchLogs", JSON.stringify(logs));
+      displaySearchLogs();
+
       const url = `https://ops.ipemis.dpe.gov.bd/view-teacher-info/${id}`;
       window.open(url, '_blank');
+    }
+
+    function displaySearchLogs() {
+      const logs = JSON.parse(localStorage.getItem("searchLogs") || "[]");
+      const list = document.getElementById("searchLog");
+      list.innerHTML = "";
+
+      if (logs.length === 0) {
+        list.innerHTML = "<li>😶 এখনো কিছু খোঁজা হয়নি।</li>";
+        return;
+      }
+
+      logs.slice().reverse().forEach((log, index) => {
+        const li = document.createElement("li");
+        li.textContent = `#${logs.length - index}: আইপি: ${log.ip}, আইডি: ${log.id}, সময়: ${log.time}`;
+        list.appendChild(li);
+      });
+    }
+
+    function loadLastTeacherId() {
+      const lastId = localStorage.getItem("lastTeacherId") || "";
+      document.getElementById("teacherIdInput").value = lastId;
     }
   </script>
 </body>
