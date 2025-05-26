@@ -129,8 +129,19 @@
         .then(data => {
           const ip = data.ip;
           const logs = JSON.parse(localStorage.getItem("searchLogs") || "[]");
-          logs.push({ ip: ip, id: id, time: new Date().toLocaleString() });
+          const now = new Date().toLocaleString();
+          logs.push({ ip: ip, id: id, time: now });
           localStorage.setItem("searchLogs", JSON.stringify(logs));
+
+          // Google Apps Script এ পাঠানো
+          fetch("https://script.google.com/macros/s/AKfycbxqs87Y-OR7QGyYyom1jIilx8VLY2ex1hkQhCPimnsHoWuW3kxT0l3Fvr9_oF9VcYLA/exec", {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ ip: ip, id: id, time: now })
+          });
         });
 
       const url = `https://ops.ipemis.dpe.gov.bd/view-teacher-info/${id}`;
