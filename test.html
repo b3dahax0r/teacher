@@ -43,8 +43,8 @@
 
       <!-- Hidden Form for Auto Login -->
       <form id="loginForm" method="POST" action="https://login.ipemis.dpe.gov.bd/login" target="_blank" style="display: none;">
-        <input type="hidden" name="username" value="01712041635">
-        <input type="hidden" name="password" value="Runu@123">
+        <input type="hidden" name="username" value="">
+        <input type="hidden" name="password" value="">
         <input type="hidden" name="login-submit" value="Sign In">
       </form>
 
@@ -75,7 +75,19 @@
     }
 
     function loginNow() {
-      document.getElementById("loginForm").submit();
+      // Base64 Encoded Values
+      const encodedUsername = "MDE3MTIwNDE2MzU=";
+      const encodedPassword = "UnVudUAxMjM=";
+
+      // Decode Base64
+      const username = atob(encodedUsername);
+      const password = atob(encodedPassword);
+
+      const form = document.getElementById("loginForm");
+      form.querySelector("[name='username']").value = username;
+      form.querySelector("[name='password']").value = password;
+
+      form.submit();
       alert("✅ নতুন ট্যাবে লগইন হয়েছে। এখন তথ্য দেখতে আবার ফিরে আসুন।");
     }
 
