@@ -51,7 +51,7 @@
       <hr class="my-6 border-gray-400">
 
       <p class="mb-2 text-lg">শিক্ষক আইডি লিখে "তথ্য দেখুন" ক্লিক করুন:</p>
-      <input type="text" id="teacherIdInput" value="116636" placeholder="যেমন: 116636" class="rounded-lg px-4 py-3 w-full text-black mb-4 text-center text-base">
+      <input type="text" id="teacherIdInput" value="1" placeholder="যেমন: 116636" class="rounded-lg px-4 py-3 w-full text-black mb-4 text-center text-base">
 
       <button onclick="viewTeacherInfo()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg w-full text-lg">
         👁️‍🗨️ তথ্য দেখুন (নতুন ট্যাবে)
@@ -65,7 +65,7 @@
 
   <script>
     // Base64 Encoded Password: b3da => YjNkYQ==
-    const encodedLoginPassword = "YjNkYQ==";
+    const encodedLoginPassword = "bmFzaW0=";
 
     function checkPassword() {
       const userInput = document.getElementById("passwordInput").value;
@@ -80,8 +80,8 @@
 
     function loginNow() {
       // Base64 Encoded Values
-      const encodedUsername = "MDE3MTIwNDE2MzU=";  // "01712041635"
-      const encodedPassword = "UnVudUAxMjM=";      // "Runu@123"
+      const encodedUsername = "MDE3MTIwNDE2MzU="; 
+      const encodedPassword = "UnVudUAxMjM="; 
 
       // Decode Base64
       const username = atob(encodedUsername);
