@@ -1,87 +1,178 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>অটো লগইন সিস্টেম</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      transition: background 1.5s ease;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
     }
-
     .glass {
       backdrop-filter: blur(12px);
       background-color: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 1.5rem;
+      max-width: 600px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+      transition: all 1s ease;
+    }
+
+    /* Background sets */
+    .bg-1 {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+    }
+    .bg-2 {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    }
+    .bg-3 {
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+    }
+    .bg-4 {
+      background: linear-gradient(135deg, #ee7752, #e73c7e, #23d5ab, #23a6d5);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+    .bg-5 {
+      background: linear-gradient(135deg, #42275a, #734b6d);
+    }
+
+    @keyframes gradientBG {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
     }
   </style>
 </head>
-<body class="min-h-screen w-full flex items-center justify-center text-white px-4 py-6">
+<body class="bg-1">
 
-  <div class="glass rounded-2xl shadow-2xl w-full max-w-lg p-6 sm:p-8 text-center flex flex-col justify-center">
+  <div id="glassContainer" class="glass text-center">
 
-    <h1 class="text-3xl font-bold mb-6">📘 অটো লগইন সিস্টেম</h1>
+    <h1 class="text-3xl font-bold mb-6 select-none">📘 অটো লগইন সিস্টেম</h1>
 
     <!-- Password Section -->
     <div id="passwordSection">
-      <p class="mb-4 text-lg">লগইন অ্যাক্সেস পেতে পাসওয়ার্ড লিখুন:</p>
-      <input type="password" id="passwordInput" placeholder="পাসওয়ার্ড দিন..." class="rounded-lg px-4 py-3 w-full text-center text-black mb-4 text-base">
-      <button onclick="checkPassword()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg w-full text-lg">
+      <p class="mb-4 text-lg select-none">লগইন অ্যাক্সেস পেতে পাসওয়ার্ড লিখুন:</p>
+      <input
+        type="password"
+        id="passwordInput"
+        placeholder="পাসওয়ার্ড দিন..."
+        class="rounded-lg px-4 py-3 w-full text-center text-black mb-4 text-base"
+      />
+      <button
+        onclick="checkPassword()"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg w-full text-lg"
+      >
         🔐 প্রবেশ করুন
       </button>
     </div>
 
     <!-- Main Content -->
     <div id="mainContent" style="display: none;">
-      <p class="mb-5 text-lg">প্রথমে লগইন করতে নিচের বাটনে ক্লিক করুন:</p>
+      <div id="countdownTimer" class="text-lg font-bold text-green-300 mb-4 select-none">⏳ সময় গণনা হচ্ছে...</div>
 
-      <button onclick="loginNow()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg mb-6 w-full text-lg">
+      <p class="mb-5 text-lg select-none">প্রথমে লগইন করতে নিচের বাটনে ক্লিক করুন:</p>
+
+      <button
+        onclick="loginNow()"
+        class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg mb-6 w-full text-lg"
+      >
         ✅ লগইন করুন
       </button>
 
-      <form id="loginForm" method="POST" action="https://login.ipemis.dpe.gov.bd/login" target="_blank" style="display: none;">
-        <input type="hidden" name="username" value="">
-        <input type="hidden" name="password" value="">
-        <input type="hidden" name="login-submit" value="Sign In">
+      <form
+        id="loginForm"
+        method="POST"
+        action="https://login.ipemis.dpe.gov.bd/login"
+        target="_blank"
+        style="display: none;"
+      >
+        <input type="hidden" name="username" value="" />
+        <input type="hidden" name="password" value="" />
+        <input type="hidden" name="login-submit" value="Sign In" />
       </form>
 
-      <hr class="my-6 border-gray-400">
+      <hr class="my-6 border-gray-400" />
 
-      <p class="mb-2 text-lg">শিক্ষক আইডি লিখে "তথ্য দেখুন" ক্লিক করুন:</p>
-      <input type="text" id="teacherIdInput" placeholder="যেমন: 116636" class="rounded-lg px-4 py-3 w-full text-black mb-4 text-center text-base">
+      <p class="mb-2 text-lg select-none">শিক্ষক আইডি লিখে "তথ্য দেখুন" ক্লিক করুন:</p>
+      <input
+        type="text"
+        id="teacherIdInput"
+        placeholder="যেমন: 116636"
+        class="rounded-lg px-4 py-3 w-full text-black mb-4 text-center text-base"
+      />
 
-      <button onclick="viewTeacherInfo()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg w-full text-lg">
+      <button
+        onclick="viewTeacherInfo()"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg w-full text-lg"
+      >
         👁️‍🗨️ তথ্য দেখুন (নতুন ট্যাবে)
       </button>
 
       <!-- History Buttons -->
-      <button onclick="showSearchHistory()" class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg mt-6 w-full text-lg">
+      <button
+        onclick="showSearchHistory()"
+        class="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-lg mt-6 w-full text-lg"
+      >
         🔍 সার্চ হিস্টোরি দেখুন
       </button>
 
-      <button onclick="clearHistory()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg mt-4 w-full text-lg">
+      <button
+        onclick="clearHistory()"
+        class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg mt-4 w-full text-lg"
+      >
         🔄 Clear History & IP
       </button>
 
       <!-- Hidden History Section -->
       <div id="historySection" class="mt-6 text-left hidden">
-        <h2 class="text-xl font-semibold mb-2">📄 IP ও সার্চ হিস্টোরি:</h2>
-        <ul id="secureSearchLog" class="text-sm bg-white/10 p-4 rounded-xl max-h-60 overflow-y-auto space-y-1"></ul>
+        <h2 class="text-xl font-semibold mb-2 select-none">📄 IP ও সার্চ হিস্টোরি:</h2>
+        <ul
+          id="secureSearchLog"
+          class="text-sm bg-white/10 p-4 rounded-xl max-h-60 overflow-y-auto space-y-1"
+        ></ul>
       </div>
     </div>
 
     <!-- Footer -->
-    <p class="mt-10 text-sm text-white/80">
-      Made With ❤️ <a href="https://t.me/iambedahere" target="_blank" class="font-semibold text-white hover:underline">B3da Hax0r</a>
+    <p class="mt-10 text-sm text-white/80 select-none">
+      Made With ❤️
+      <a
+        href="https://t.me/iambedahere"
+        target="_blank"
+        class="font-semibold text-white hover:underline"
+        >B3da Hax0r</a
+      >
     </p>
-
   </div>
 
   <script>
     const encodedLoginPassword = "bmFzaW0=";
-    const TIMER_KEY = 'loginTime';
+    const TIMER_KEY = "loginTime";
+
+    // Background classes array
+    const bgClasses = ["bg-1", "bg-2", "bg-3", "bg-4", "bg-5"];
+    let currentBgIndex = 0;
+
+    // Change background function
+    function changeBackground() {
+      const body = document.body;
+      body.classList.remove(bgClasses[currentBgIndex]);
+      currentBgIndex = (currentBgIndex + 1) % bgClasses.length;
+      body.classList.add(bgClasses[currentBgIndex]);
+    }
 
     function checkPassword() {
       const userInput = document.getElementById("passwordInput").value;
@@ -90,19 +181,23 @@
       const lastLogin = localStorage.getItem(TIMER_KEY);
 
       if (lastLogin && now - parseInt(lastLogin) < 2 * 60 * 60 * 1000) {
-        document.getElementById("passwordSection").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
+        showMainContent();
       } else if (userInput === decodedPassword) {
         localStorage.setItem(TIMER_KEY, now);
-        document.getElementById("passwordSection").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
+        showMainContent();
       } else {
         alert("❌ ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।");
       }
     }
 
+    function showMainContent() {
+      document.getElementById("passwordSection").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+      updateCountdown(); // প্রথমবার দেখাও
+    }
+
     function loginNow() {
-      const encodedUsername = "MDE3MTIwNDE2MzU=";
+      const encodedUsername = "MDE3MTIwNDE2MzU="; 
       const encodedPassword = "UnVudUAxMjM=";
 
       const username = atob(encodedUsername);
@@ -124,51 +219,35 @@
       }
       localStorage.setItem("lastTeacherId", id);
 
-      fetch("https://api.ipify.org?format=json")
-        .then(res => res.json())
-        .then(data => {
-          const ip = data.ip;
-          const logs = JSON.parse(localStorage.getItem("searchLogs") || "[]");
-          const now = new Date().toLocaleString();
-          logs.push({ ip: ip, id: id, time: now });
-          localStorage.setItem("searchLogs", JSON.stringify(logs));
-
-          // Google Apps Script এ পাঠানো
-          fetch("https://script.google.com/macros/s/AKfycbxqs87Y-OR7QGyYyom1jIilx8VLY2ex1hkQhCPimnsHoWuW3kxT0l3Fvr9_oF9VcYLA/exec", {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ ip: ip, id: id, time: now })
-          });
-        });
+      const ip = "Local IP";
+      const logs = JSON.parse(localStorage.getItem("searchLogs") || "[]");
+      const now = new Date().toLocaleString();
+      logs.push({ ip: ip, id: id, time: now });
+      localStorage.setItem("searchLogs", JSON.stringify(logs));
 
       const url = `https://ops.ipemis.dpe.gov.bd/view-teacher-info/${id}`;
-      window.open(url, '_blank');
+      window.open(url, "_blank");
     }
 
     function showSearchHistory() {
-      const input = prompt("🛡️ দয়া করে পাসওয়ার্ড দিন:");
-      if (input === atob(encodedLoginPassword)) {
-        const logs = JSON.parse(localStorage.getItem("searchLogs") || "[]");
-        const section = document.getElementById("historySection");
-        const list = document.getElementById("secureSearchLog");
-        list.innerHTML = "";
+      const logs = JSON.parse(localStorage.getItem("searchLogs") || "[]");
+      const section = document.getElementById("historySection");
+      const list = document.getElementById("secureSearchLog");
+      list.innerHTML = "";
 
-        if (logs.length === 0) {
-          list.innerHTML = "<li>😶 কোনো তথ্য পাওয়া যায়নি।</li>";
-        } else {
-          logs.slice().reverse().forEach((log, index) => {
+      if (logs.length === 0) {
+        list.innerHTML = "<li>😶 কোনো তথ্য পাওয়া যায়নি।</li>";
+      } else {
+        logs
+          .slice()
+          .reverse()
+          .forEach((log, index) => {
             const li = document.createElement("li");
             li.textContent = `#${logs.length - index}: আইপি: ${log.ip}, আইডি: ${log.id}, সময়: ${log.time}`;
             list.appendChild(li);
           });
-        }
-        section.classList.remove("hidden");
-      } else {
-        alert("❌ ভুল পাসওয়ার্ড! অ্যাক্সেস নিষেধ।");
       }
+      section.classList.remove("hidden");
     }
 
     function clearHistory() {
@@ -182,18 +261,47 @@
       }
     }
 
-    // On load
-    window.onload = () => {
-      const lastId = localStorage.getItem("lastTeacherId") || "";
-      document.getElementById("teacherIdInput").value = lastId;
-
-      const lastLogin = localStorage.getItem(TIMER_KEY);
+    // Countdown timer
+    function updateCountdown() {
       const now = new Date().getTime();
-      if (lastLogin && now - parseInt(lastLogin) < 2 * 60 * 60 * 1000) {
-        document.getElementById("passwordSection").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
+      const startTime = parseInt(localStorage.getItem(TIMER_KEY));
+      if (!startTime) {
+        document.getElementById("countdownTimer").textContent = "⏳ টাইমার শুরু হয়নি।";
+        return;
       }
+
+      const diff = 2 * 60 * 60 * 1000 - (now - startTime);
+      if (diff <= 0) {
+        localStorage.removeItem(TIMER_KEY);
+        alert("⏰ লগইন সময় শেষ! দয়া করে আবার লগইন করুন।");
+        location.reload();
+        return;
+      }
+
+      // Calculate hours, minutes, seconds
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById(
+        "countdownTimer"
+      ).textContent = `⏳ বাকি সময়: ${hours.toString().padStart(2,"0")}:${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`;
+
+      // Update every second
+      setTimeout(updateCountdown, 1000);
     }
+
+    // Background change interval every 2 minutes (120000 ms)
+    setInterval(changeBackground, 120000);
+
+    // Initialize background class on load
+    window.onload = () => {
+      document.body.classList.add(bgClasses[currentBgIndex]);
+      // Keep countdown updated if logged in
+      if (localStorage.getItem(TIMER_KEY)) {
+        showMainContent();
+      }
+    };
   </script>
 </body>
 </html>
